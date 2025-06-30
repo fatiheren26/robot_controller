@@ -33,11 +33,11 @@ class GoalMover(Node):
         self.target_x = 0.0
         self.target_y = -0.5
         self.position_tolerance = 0.05
-        self.angle_tolerance = 0.1  # radyan cinsinden, ~5.7 derece
+        self.angle_tolerance = 0.1  
 
         self.current_x = 0.0
         self.current_y = 0.0
-        self.yaw = 0.0  # robotun yönü (açı)
+        self.yaw = 0.0  
 
         self.reached_goal = False
         self.timer = self.create_timer(0.1, self.move_to_goal)
@@ -46,7 +46,6 @@ class GoalMover(Node):
         self.current_x = msg.pose.pose.position.x
         self.current_y = msg.pose.pose.position.y
 
-        # Quaternion'dan Euler açıya dönüşüm (yaw almak için)
         orientation_q = msg.pose.pose.orientation
         quaternion = (
             orientation_q.x,
@@ -56,7 +55,6 @@ class GoalMover(Node):
         )
         _, _, self.yaw = euler_from_quaternion(*quaternion)
 
-        # Konumu terminale yazdır
         self.get_logger().info(
             f"Current Position → x: {self.current_x:.2f}, y: {self.current_y:.2f}, yaw: {math.degrees(self.yaw):.1f}°"
         )
@@ -76,9 +74,9 @@ class GoalMover(Node):
         twist = Twist()
 
         if distance > self.position_tolerance:
-            # Önce yönü düzelt
+            # Yonu duzelt
             if abs(angle_diff) > self.angle_tolerance:
-                twist.angular.z = 0.4 * angle_diff  # yön düzeltme
+                twist.angular.z = 0.4 * angle_diff  
                 twist.linear.x = 0.0
             else:
                 twist.linear.x = 0.2  # ileri git
